@@ -83,6 +83,13 @@ module.exports = {
       favicon: "public/favicon.ico",
     }),
 
+    // This is the seperate webpage
+    new HtmlWebpackPlugin({
+      template: "public/report.html",
+      filename: "report.html",
+      chunks: ["app"]
+    }),
+
     // Create the stylesheet under 'styles' directory
     new MiniCssExtractPlugin({
       filename: "styles/styles.[hash].css",
