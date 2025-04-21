@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from llm_connect import LLM_Connect
+from mongo import Mongo_connect
 
 app = Flask(__name__)
 CORS(app) 
 
 _llm = LLM_Connect()
+_mongo = Mongo_connect()
 
 @app.route('/text', methods=['POST'])
 def text():

@@ -10,7 +10,7 @@ class LLM_Connect():
     
     def processText(self, text):
         out = self.llm.query(text, _RiskInfo)
-        print(out)
+        return out
 
 
 # INTERNAL
@@ -26,4 +26,5 @@ if __name__ == '__main__':
     c = LLM_Connect()
     with open("test.txt", 'r') as f:
         text = f.read()
-    c.processText(text)
+    out = c.processText(text)
+    print(out)

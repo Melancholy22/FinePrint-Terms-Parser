@@ -1,8 +1,24 @@
 
 from llm_connect import LLM_Connect
+from mongo import Mongo_connect
 
+llm = LLM_Connect()
+mongo = Mongo_connect()
 
-c = LLM_Connect()
 with open("test.txt", 'r') as f:
     text = f.read()
-c.processText(text)
+out = llm.processText(text)
+for item in out.items():
+    print (item)
+
+# reviews = mongo.getReviews("testsite")
+# for review in reviews:
+#     print (review)
+
+
+# doc = mongo.getTerms("testsite")
+# if doc is None:
+#     mongo.putTerms("testsite", out)
+#     doc = mongo.getTerms("testsite")
+# print(doc)
+
