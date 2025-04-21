@@ -3,8 +3,11 @@ import Header from "./header";
 import SummaryBox from "./summary";
 import GaugeWrapper from "./gauge";
 import Emoji from "./emoji";
+import FullSummary from "./FullSummary";
 
 const App = () => {
+  const isReportPage = window.location.pathname.includes("report.html");
+
   const [termsText, setTermsText] = useState("Loading...");
   const [riskScore, setRiskScore] = useState(null);
 
@@ -51,6 +54,10 @@ const App = () => {
     }
   }, [termsText]);
 
+  if (isReportPage) {
+    return <FullSummary risk_score={riskScore ?? 0}/>;
+  }
+
   return (
     <div style={{ width: "345px", height: "600px", fontFamily: "sans-serif" }}>
       <Header bgColor={assign_color(riskScore ?? 0)} />
@@ -84,7 +91,10 @@ const App = () => {
         </button>
 
         <button
-          onClick={() => console.log("View Full Report")}
+          onClick={() => {
+            console.log("View Full Report");
+            chrome.tabs.create({ url: chrome.runtime.getURL("report.html") });
+          }}
           style={{
             backgroundColor: "var(--soft-yellow)",
             borderRadius: "8px",
