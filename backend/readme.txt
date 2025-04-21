@@ -5,3 +5,7 @@ If that failed, manually install these packages using pip: flask, flask_cors, op
 
 test.py sends a request to openai using part of the apple ToC and prints the response.
 
+
+Plumbing update:
+if conda didn't work, pip install dotenv "pymongo[srv]"
+
