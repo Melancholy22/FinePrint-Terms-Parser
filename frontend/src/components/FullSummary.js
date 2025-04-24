@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import GaugeWrapper from "./gauge"; // ✅ reuse your gauge
-// import other components if needed
+import GaugeWrapper from "./gauge";
+import "./styles.css";
 
-const FullSummary = ({risk_score}) => {
+const FullSummary = ({ risk_score }) => {
   const [termsText, setTermsText] = useState("");
   const lastScannedDate = new Date().toLocaleDateString();
 
@@ -14,20 +14,20 @@ const FullSummary = ({risk_score}) => {
   }, []);
 
   return (
-    <div style={{ padding: "24px", fontFamily: "sans-serif" }}>
-      <h1>FinePrint</h1>
-      <h2>Last Report: {lastScannedDate}</h2>
+    <div className="full-summary-container">
+      <h1 className="fineprint-title">
+        Fine <span class>Print</span>
+      </h1>
+      <h2 className="last-report">Last Report: {lastScannedDate}</h2>
 
-      <div style={{ margin: "20px 0" }}>
+      <div className="gauge-wrapper">
         <GaugeWrapper risk_score={risk_score} />
       </div>
 
-      <section>
+      <section className="terms-section">
         <h3>Raw Terms:</h3>
-        <p style={{ whiteSpace: "pre-wrap" }}>{termsText}</p>
+        <p>{termsText}</p>
       </section>
-
-      {/* Future: Render breakdown of risks by level */}
     </div>
   );
 };

@@ -5,7 +5,7 @@ from mongo import Mongo_connect
 llm = LLM_Connect()
 mongo = Mongo_connect()
 
-with open("test.txt", 'r') as f:
+with open("test.txt", 'r', encoding='utf-8') as f:
     text = f.read()
 out = llm.processText(text)
 for item in out.items():

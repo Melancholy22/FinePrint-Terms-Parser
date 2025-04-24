@@ -24,7 +24,7 @@ class _RiskInfo(pydantic.BaseModel):
 
 if __name__ == '__main__': 
     c = LLM_Connect()
-    with open("test.txt", 'r') as f:
+    with open("test.txt", 'r', encoding='utf-8') as f:
         text = f.read()
     out = c.processText(text)
     print(out)

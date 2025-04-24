@@ -16,7 +16,7 @@ def text():
     if not data or 'text' not in data:
         return jsonify({'error': 'No text provided'}), 400
 
-    text = data['text']
+    text = _llm.processText(data["text"])
     print(f"Received text: {text}")
 
     return jsonify({'message': 'Text received successfully', 'received_text': text}), 200

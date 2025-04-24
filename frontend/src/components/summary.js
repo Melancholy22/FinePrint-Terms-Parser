@@ -28,9 +28,13 @@ const SummaryBox = ({ termsText, bgColor }) => {
       }}
     >
       <strong>Important</strong>
-      <p style={{ whiteSpace: "pre-wrap", marginTop: "5px" }}>
-        {termsText}
-      </p>
+      <ul>
+        <i> {termsText.licence_to_use_user_content}</i>
+        <i> {termsText.limited_liability}</i>
+        <i> {termsText.renewal_of_service}</i>
+        <i> {termsText.suspension_of_service}</i>
+        <i> {termsText.user_data}</i>
+      </ul>
     </div>
   );
 };
