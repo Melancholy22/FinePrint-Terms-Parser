@@ -12,6 +12,7 @@ for item in out.items():
     print (item)
 
 # reviews = mongo.getReviews("testsite")
+# print(list(reviews))
 # for review in reviews:
 #     print (review)
 

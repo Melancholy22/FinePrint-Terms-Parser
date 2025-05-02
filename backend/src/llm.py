@@ -4,11 +4,9 @@ import openai
 from dotenv import load_dotenv
 
 class LLM:
-    MODEL = 'gpt-4o-mini'
-    API_KEY = ""
+    MODEL = 'gpt-4.1-mini'
     SYSTEM = 'You are an expert reading and analyzing terms of service documents.'
-    USER = 'Read the terms of service document carefully and analyze the risks involved in each category. Here is the document: '
-
+    
     def __init__(self):
         load_dotenv()
         self.API_KEY = os.environ.get('API_KEY')
@@ -27,7 +25,7 @@ class LLM:
                     'content': self._format(self.SYSTEM)
                 }, {
                     'role': 'user',
-                    'content': self._format(self.USER + text)
+                    'content': self._format(text)
                 }
             ],
             response_format=response
