@@ -4,75 +4,85 @@ import SummaryBox from "./summary";
 import GaugeWrapper from "./gauge";
 import Emoji from "./emoji";
 import FullSummary from "./FullSummary";
-import ClipLoader from "react-spinners/ClipLoader"; // ✅ NEW
-import "./styles.css";
 import BulletList from "./bulletList";
 
 const App = () => {
   const isReportPage = window.location.pathname.includes("report.html");
 
   const [termsText, setTermsText] = useState("Loading...");
+  const [companyName, setCompanyName] = useState(null);
   const [riskScore, setRiskScore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  function assign_color(score) {
-    if (score <= 20) return "#13B756";
-    else if (score <= 40) return "#8BC33C";
-    else if (score <= 60) return "#FFC300";
-    else if (score <= 80) return "#F97127";
-    else if (score <= 100) return "#FB4245";
-    return "#ffffff";
-  }
+  const isDevelopmentMode = true; // Set this to false when you're done with development
 
-  function assign_message(score) {
-    if (score <= 20) return "No Risk";
-    else if (score <= 40) return "Low Risk";
-    else if (score <= 60) return "Medium Risk";
-    else if (score <= 80) return "High Risk";
-    else if (score <= 100) return "DANGER";
-    return "Parsing Failed";
+  function assign_color(score) {
+    if (typeof score !== "number" || score < 0 || score > 100) return "#929292";
+    if (score <= 20) return "#13B756";
+    if (score <= 40) return "#8BC33C";
+    if (score <= 60) return "#FFC300";
+    if (score <= 80) return "#F97127";
+    return "#FB4245";
   }
+  
+  const colorMap = {
+    "#13B756": "var(--soft-green)",       // green
+    "#8BC33C": "var(--soft-light-green)", // light-green
+    "#FFC300": "var(--soft-yellow)",      // yellow
+    "#F97127": "var(--soft-orange)",      // orange
+    "#FB4245": "var(--soft-red)",         // red
+    "#929292": "#DEE1E6"                  // fallback/default
+  };
 
   useEffect(() => {
-    chrome.storage.local.get("termsText", (result) => {
-      if (result.termsText?.trim()) {
-        fetch("http://localhost:5000/text", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            text: "A. INTRODUCTION\nThis Agreement governs your use of Apple’s services..."
+    if (isDevelopmentMode) { // This is so we don't keep calling the API
+      const mockTermsText = "A. INTRODUCTION\nThis Agreement governs your use of Apple’s services...";
+      setTermsText(mockTermsText);
+      setCompanyName("FinePrint");
+      setLoading(false);
+    } else {
+      chrome.storage.local.get(["termsText", "company"], (result) => {
+        if (result.termsText?.trim()) {
+          fetch("http://localhost:5000/text", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              text: "A. INTRODUCTION\nThis Agreement governs your use of Apple’s services..."
+            })
           })
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log("Server response:", data);
-            setTermsText(data.received_text);
-          })
-          .catch(error => {
-            console.error("Error posting to /text:", error);
-            setError("Failed to load terms and conditions.");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      } else {
-        setTermsText("No terms and conditions found on this page.");
-        setLoading(false);
-      }
-    });
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log("Server response:", data);
+              setTermsText(data.received_text);
+              setCompanyName(result.company || "unknown")
+            })
+            .catch(error => {
+              console.error("Error posting to /text:", error);
+              setError("Failed to load terms and conditions.");
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        } else {
+          setTermsText("No terms and conditions found on this page.");
+          setCompanyName(result.company || "Unknown");
+          setLoading(false);
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {
     if (termsText && termsText !== "Loading...") {
-      const mockGPTResponse = { risk: 43 };
+      const mockGPTResponse = { risk: 70 };
       const risk = mockGPTResponse.risk;
       setRiskScore(risk);
 
@@ -119,7 +129,7 @@ const App = () => {
         <button
           onClick={() => console.log("Paste T&C Link")}
           style={{
-            backgroundColor: "var(--soft-yellow)",
+            backgroundColor: colorMap[assign_color(riskScore ?? 0)],
             borderRadius: "8px",
             padding: "10px",
             width: "135px",
@@ -138,7 +148,7 @@ const App = () => {
             chrome.tabs.create({ url: chrome.runtime.getURL("report.html") });
           }}
           style={{
-            backgroundColor: "var(--soft-yellow)",
+            backgroundColor: colorMap[assign_color(riskScore ?? 0)],
             borderRadius: "8px",
             padding: "10px",
             width: "135px",

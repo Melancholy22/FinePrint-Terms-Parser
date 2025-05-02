@@ -8,7 +8,7 @@ const SummaryBox = ({ termsText, bgColor }) => {
     "#FFC300": "var(--soft-yellow)",      // yellow
     "#F97127": "var(--soft-orange)",      // orange
     "#FB4245": "var(--soft-red)",         // red
-    "#ffffff": "var(--white)"             // fallback/default
+    "#929292": "#DEE1E6"             // fallback/default
   };
 
   const softColor = colorMap[bgColor] || "var(--white)";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GaugeComponent } from "react-gauge-component";
 
-const GaugeWrapper = ({risk_score}) => {
+const GaugeWrapper = ({ risk_score, width = 260, height = 210 }) => {
   const [colors, setColors] = useState(null);
 
   useEffect(() => {
@@ -15,12 +15,12 @@ const GaugeWrapper = ({risk_score}) => {
     ]);
   }, []);
 
-  if (!colors) return null; // Or a loader/spinner
+  if (!colors) return null;
 
   return (
     <GaugeComponent
       value={risk_score}
-      style={{ width: "260px", height: "210px" }}
+      style={{ width: `${width}px`, height: `${height}px` }}
       type="radial"
       arc={{
         colorArray: colors,
